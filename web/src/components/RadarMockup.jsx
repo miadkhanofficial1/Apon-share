@@ -4,15 +4,14 @@ import { Laptop, Smartphone, Monitor, Tablet, Wifi, ShieldCheck, Zap, CheckCircl
 const DEVICES = [
   {
     id: 'dev-1',
-    name: 'MacBook Pro M3',
+    name: 'MacBook Pro',
     owner: 'Sarah M.',
     type: 'laptop',
     icon: Laptop,
-    x: '22%',
-    y: '28%',
+    x: '24%',
+    y: '26%',
     ip: '192.168.1.104',
     ping: '2ms',
-    color: 'emerald'
   },
   {
     id: 'dev-2',
@@ -20,23 +19,21 @@ const DEVICES = [
     owner: 'David K.',
     type: 'phone',
     icon: Smartphone,
-    x: '75%',
-    y: '32%',
+    x: '76%',
+    y: '28%',
     ip: '192.168.1.112',
     ping: '1ms',
-    color: 'sky'
   },
   {
     id: 'dev-3',
-    name: 'Windows Desktop',
+    name: 'Windows Rig',
     owner: 'Studio Rig',
     type: 'desktop',
     icon: Monitor,
-    x: '78%',
-    y: '72%',
+    x: '76%',
+    y: '74%',
     ip: '192.168.1.140',
     ping: '1ms',
-    color: 'indigo'
   },
   {
     id: 'dev-4',
@@ -45,10 +42,9 @@ const DEVICES = [
     type: 'tablet',
     icon: Tablet,
     x: '24%',
-    y: '76%',
+    y: '74%',
     ip: '192.168.1.129',
     ping: '3ms',
-    color: 'amber'
   }
 ];
 
@@ -68,7 +64,7 @@ export default function RadarMockup() {
             setTimeout(() => setIsTransferring(false), 1200);
             return 100;
           }
-          const increment = Math.floor(Math.random() * 12) + 8;
+          const increment = Math.floor(Math.random() * 14) + 10;
           const nextSpeed = (88 + Math.random() * 25).toFixed(1) + ' MB/s';
           setSpeed(nextSpeed);
           return Math.min(prev + increment, 100);
@@ -85,11 +81,11 @@ export default function RadarMockup() {
   };
 
   return (
-    <div className="relative w-full max-w-md lg:max-w-[450px] mx-auto rounded-2xl bg-slate-900/95 dark:bg-slate-950/90 text-white shadow-xl border border-slate-700/60 p-5 overflow-hidden backdrop-blur-xl">
+    <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-[410px] mx-auto rounded-2xl bg-slate-900/95 dark:bg-slate-950/90 text-white shadow-xl border border-slate-700/60 p-4 sm:p-5 overflow-hidden backdrop-blur-xl">
       
       {/* Top Header Mockup Bar */}
-      <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/30 flex items-center justify-center">
             <img src="/assets/icon.png" alt="Apon" className="w-4 h-4 rounded" />
           </div>
@@ -105,19 +101,19 @@ export default function RadarMockup() {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-0.5 rounded-full text-[11px] text-slate-300 border border-slate-700">
+        <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-0.5 rounded-full text-[10px] text-slate-300 border border-slate-700">
           <Wifi className="w-3 h-3 text-sky-400" />
           <span>4 Peers Found</span>
         </div>
       </div>
 
-      {/* Interactive Radar Visualizer Screen */}
-      <div className="relative my-4 aspect-square w-full max-w-[310px] mx-auto rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center border border-sky-500/20 shadow-inner overflow-hidden">
+      {/* Interactive Radar Screen - Compact & Crisp */}
+      <div className="relative my-3.5 aspect-square w-full max-w-[270px] sm:max-w-[290px] mx-auto rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center border border-sky-500/20 shadow-inner overflow-hidden">
         
         {/* Radar Concentric Rings */}
-        <div className="absolute inset-8 rounded-full border border-sky-500/10 pointer-events-none"></div>
-        <div className="absolute inset-20 rounded-full border border-sky-500/15 pointer-events-none"></div>
-        <div className="absolute inset-32 rounded-full border border-sky-500/20 pointer-events-none"></div>
+        <div className="absolute inset-6 rounded-full border border-sky-500/10 pointer-events-none"></div>
+        <div className="absolute inset-16 rounded-full border border-sky-500/15 pointer-events-none"></div>
+        <div className="absolute inset-26 rounded-full border border-sky-500/20 pointer-events-none"></div>
         
         {/* Radar Crosshairs */}
         <div className="absolute inset-x-0 top-1/2 h-px bg-sky-500/15 pointer-events-none"></div>
@@ -133,12 +129,12 @@ export default function RadarMockup() {
 
         {/* Center Node (Current Device) */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 p-0.5 shadow-lg shadow-sky-500/30 flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center p-2">
-              <img src="/assets/icon.png" alt="This Device" className="w-8 h-8 rounded-md" />
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 p-0.5 shadow-md shadow-sky-500/30 flex items-center justify-center">
+            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center p-1.5">
+              <img src="/assets/icon.png" alt="This Device" className="w-6 h-6 rounded" />
             </div>
           </div>
-          <span className="mt-1.5 text-[11px] font-semibold tracking-wide text-sky-300">You (Broadcasting)</span>
+          <span className="mt-1 text-[10px] font-semibold tracking-wide text-sky-300">You</span>
         </div>
 
         {/* Discovered Device Nodes */}
@@ -156,22 +152,21 @@ export default function RadarMockup() {
               }`}
             >
               <div className="relative flex flex-col items-center">
-                {/* Ripple effect on select */}
                 {isSelected && (
-                  <span className="absolute -inset-2 rounded-full bg-sky-400/20 animate-ping pointer-events-none"></span>
+                  <span className="absolute -inset-1.5 rounded-full bg-sky-400/20 animate-ping pointer-events-none"></span>
                 )}
 
                 <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all shadow-md ${
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all shadow-sm ${
                     isSelected
-                      ? 'bg-sky-500 text-white ring-4 ring-sky-400/30 shadow-sky-500/50'
+                      ? 'bg-sky-500 text-white ring-2 ring-sky-400/40 shadow-sky-500/50'
                       : 'bg-slate-800 text-slate-300 border border-slate-700 hover:border-sky-400/50 hover:text-white'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4" />
                 </div>
                 
-                <span className="mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-900/90 text-slate-300 border border-slate-800 shadow whitespace-nowrap">
+                <span className="mt-0.5 px-1 py-0.5 rounded text-[9px] font-medium bg-slate-900/90 text-slate-300 border border-slate-800 shadow whitespace-nowrap">
                   {device.name}
                 </span>
               </div>
@@ -181,32 +176,32 @@ export default function RadarMockup() {
       </div>
 
       {/* Transfer Panel & Controls */}
-      <div className="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 space-y-3">
+      <div className="bg-slate-950/80 rounded-xl p-3 border border-slate-800 space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-400">Target Peer:</span>
-            <span className="font-semibold text-white">{selectedDevice.name}</span>
-            <span className="text-slate-500 text-[11px]">({selectedDevice.ip})</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-400 text-[11px]">Peer:</span>
+            <span className="font-semibold text-white text-[11px]">{selectedDevice.name}</span>
+            <span className="text-slate-500 text-[10px]">({selectedDevice.ip})</span>
           </div>
-          <span className="text-emerald-400 font-mono text-[11px] flex items-center gap-1">
-            <Zap className="w-3 h-3" />
+          <span className="text-emerald-400 font-mono text-[10px] flex items-center gap-1">
+            <Zap className="w-2.5 h-2.5" />
             {speed}
           </span>
         </div>
 
         {/* Progress bar */}
-        <div className="space-y-1.5">
-          <div className="flex justify-between text-[11px] text-slate-400">
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] text-slate-400">
             <span>
               {isTransferring
                 ? progress < 100
-                  ? 'Transferring Project_Assets.zip (1.4 GB)...'
+                  ? 'Transferring Project_Assets.zip...'
                   : 'Transfer Completed!'
-                : 'Click any device or button to test transfer'}
+                : 'Click device to test transfer'}
             </span>
             <span className="font-mono text-sky-400 font-semibold">{isTransferring ? `${progress}%` : 'Ready'}</span>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-200"
               style={{ width: `${isTransferring ? progress : 0}%` }}
@@ -215,21 +210,21 @@ export default function RadarMockup() {
         </div>
 
         {/* Action Trigger */}
-        <div className="pt-1 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-[11px] text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Direct P2P • Zero Cloud • Local TLS</span>
+        <div className="pt-0.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+            <ShieldCheck className="w-3 h-3 text-emerald-400" />
+            <span>Direct P2P • TLS</span>
           </div>
 
           <button
             type="button"
             disabled={isTransferring}
             onClick={() => handleStartTransfer(selectedDevice)}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500 hover:bg-sky-400 disabled:opacity-60 text-white transition-all flex items-center gap-1.5 shadow"
+            className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-sky-500 hover:bg-sky-400 disabled:opacity-60 text-white transition-all flex items-center gap-1 shadow"
           >
             {isTransferring && progress === 100 ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                <CheckCircle2 className="w-3 h-3 text-white" />
                 Done!
               </>
             ) : isTransferring ? (
@@ -237,7 +232,7 @@ export default function RadarMockup() {
             ) : (
               <>
                 Test Send
-                <ArrowUpRight className="w-3 h-3" />
+                <ArrowUpRight className="w-2.5 h-2.5" />
               </>
             )}
           </button>

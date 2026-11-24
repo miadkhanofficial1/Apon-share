@@ -27,57 +27,57 @@ const STEPS = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-24 py-10 md:py-14 bg-white dark:bg-[#090D16] transition-colors relative">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="how-it-works" className="scroll-mt-20 py-14 bg-white dark:bg-[#090D16] transition-colors relative">
+      <div className="max-w-6xl mx-auto px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto space-y-2 mb-8">
-          <p className="text-[10px] font-bold tracking-widest uppercase text-sky-600 dark:text-sky-400">
+        <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-10">
+          <p className="text-xs font-bold tracking-widest uppercase text-sky-600 dark:text-sky-400">
             Frictionless Workflow
           </p>
-          <h2 className="text-xl sm:text-2xl font-extrabold font-heading text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 dark:text-white tracking-tight">
             How It Works in 3 Simple Steps
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">
-            No pairing pins. No Bluetooth bottlenecks. No cloud upload waits.
+          <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+            No pairing codes. No Bluetooth bottlenecks. No cloud upload waits.
           </p>
         </div>
 
-        {/* 3 Step Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+        {/* 3 Step Cards - 3-column grid with gap-5 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {STEPS.map((step, idx) => {
             const Icon = step.icon;
             return (
               <div
                 key={idx}
-                className="relative flex flex-col p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 transition-all hover:shadow-sm"
+                className="relative flex flex-col p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 transition-all hover:shadow-sm"
               >
                 {/* Step Header */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xl font-extrabold font-heading text-slate-300 dark:text-slate-700">
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-2xl font-extrabold font-heading text-slate-300 dark:text-slate-700">
                     {step.step}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
                     {step.pill}
                   </span>
                 </div>
 
                 {/* Icon */}
-                <div className="w-9 h-9 rounded-lg bg-apon-navy dark:bg-sky-600 text-white flex items-center justify-center mb-3 shadow-sm">
-                  <Icon className="w-4 h-4" />
+                <div className="w-10 h-10 rounded-xl bg-apon-navy dark:bg-sky-600 text-white flex items-center justify-center mb-4 shadow-sm">
+                  <Icon className="w-5 h-5" />
                 </div>
 
                 {/* Step Details */}
-                <h3 className="text-sm font-bold font-heading text-slate-900 dark:text-white mb-1">
+                <h3 className="text-base font-bold font-heading text-slate-900 dark:text-white mb-1.5">
                   {step.title}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-3">
+                <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
                   {step.desc}
                 </p>
 
                 {/* Footer Checkmark */}
-                <div className="mt-auto pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                  <CheckCircle className="w-3 h-3" />
+                <div className="mt-auto pt-4 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle className="w-3.5 h-3.5" />
                   <span>Encrypted Direct P2P</span>
                 </div>
               </div>
