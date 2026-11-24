@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    
+    <!-- Inline FOUC Prevention Script -->
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('theme');
+          const isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            const meta = document.querySelector('meta[name="color-scheme"]');
+            if (meta) meta.content = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            const meta = document.querySelector('meta[name="color-scheme"]');
+            if (meta) meta.content = 'light';
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <title>Apon — Instant. Private. Yours. | Cross-Platform File Sharing</title>
+    <meta name="description" content="Share files across Windows, Mac, Linux, and Android instantly with zero internet, zero cloud, and zero friction. Powered by high-speed local P2P." />
+
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-white dark:bg-[#090D16] text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

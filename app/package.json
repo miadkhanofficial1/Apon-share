@@ -1,0 +1,13 @@
+{
+  "name": "apon-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Apon - Instant, Private, Cross-Platform File Sharing App (Tauri v2)",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}
