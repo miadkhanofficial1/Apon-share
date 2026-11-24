@@ -85,34 +85,34 @@ export default function RadarMockup() {
   };
 
   return (
-    <div className="relative w-full max-w-lg lg:max-w-xl mx-auto rounded-3xl bg-slate-900/95 dark:bg-slate-950/90 text-white shadow-2xl border border-slate-700/60 p-6 md:p-8 overflow-hidden backdrop-blur-xl">
+    <div className="relative w-full max-w-md lg:max-w-[450px] mx-auto rounded-2xl bg-slate-900/95 dark:bg-slate-950/90 text-white shadow-xl border border-slate-700/60 p-5 overflow-hidden backdrop-blur-xl">
       
       {/* Top Header Mockup Bar */}
-      <div className="flex items-center justify-between pb-5 border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400/30 flex items-center justify-center">
-            <img src="/assets/icon.png" alt="Apon" className="w-5 h-5 rounded" />
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/30 flex items-center justify-center">
+            <img src="/assets/icon.png" alt="Apon" className="w-4 h-4 rounded" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold tracking-wide flex items-center gap-2">
+            <h2 className="text-xs font-semibold tracking-wide flex items-center gap-1.5">
               Apon Radar
-              <span className="flex h-2 w-2 relative">
+              <span className="flex h-1.5 w-1.5 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
               </span>
             </h2>
-            <p className="text-xs text-slate-400">Scanning local subnet (LAN & Direct P2P)</p>
+            <p className="text-[10px] text-slate-400">Scanning local subnet (LAN & Direct P2P)</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-800/80 px-2.5 py-1 rounded-full text-xs text-slate-300 border border-slate-700">
-          <Wifi className="w-3.5 h-3.5 text-sky-400" />
+        <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-0.5 rounded-full text-[11px] text-slate-300 border border-slate-700">
+          <Wifi className="w-3 h-3 text-sky-400" />
           <span>4 Peers Found</span>
         </div>
       </div>
 
       {/* Interactive Radar Visualizer Screen */}
-      <div className="relative my-6 aspect-square w-full max-w-[380px] mx-auto rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center border border-sky-500/20 shadow-inner overflow-hidden">
+      <div className="relative my-4 aspect-square w-full max-w-[310px] mx-auto rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center border border-sky-500/20 shadow-inner overflow-hidden">
         
         {/* Radar Concentric Rings */}
         <div className="absolute inset-8 rounded-full border border-sky-500/10 pointer-events-none"></div>

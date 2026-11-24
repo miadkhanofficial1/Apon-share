@@ -4,8 +4,8 @@ export function getInitialTheme() {
   if (typeof window === 'undefined') return 'light';
   try {
     const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || saved === 'light') return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (saved === 'dark') return 'dark';
+    return 'light';
   } catch (e) {
     return 'light';
   }

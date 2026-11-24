@@ -12,7 +12,7 @@
       (function() {
         try {
           const stored = localStorage.getItem('theme');
-          const isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          const isDark = stored === 'dark';
           if (isDark) {
             document.documentElement.classList.add('dark');
             const meta = document.querySelector('meta[name="color-scheme"]');
