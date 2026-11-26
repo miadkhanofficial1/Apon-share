@@ -44,6 +44,9 @@
     "copyright": "© 2026 Apon by MK.Studio. All rights reserved.",
     "category": "Utility",
     "shortDescription": "Instant. Private. Yours. Cross-platform local P2P file sharing.",
-    "longDescription": "Apon connects devices directly over local Wi-Fi or Wi-Fi Direct with zero internet and zero cloud storage."
+    "longDescription": "Apon connects devices directly over local Wi-Fi or Wi-Fi Direct with zero internet and zero cloud storage.",
+    "macOS": {
+      "entitlements": "Entitlements.plist"
+    }
   }
 }

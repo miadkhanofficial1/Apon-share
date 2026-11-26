@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { detectPlatform } from './utils/platform';
 import { getInitialTheme, applyTheme } from './utils/theme';
-import { invokeCommand } from './utils/tauri';
+import { invokeCommand, listenToPeerUpdates } from './utils/tauri';
 import DesktopWidget from './components/DesktopWidget';
 import RadarView from './components/RadarView';
 import MobileDock from './components/MobileDock';
@@ -56,12 +56,34 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch peers on load
+  // Fetch peers on load and subscribe to real-time mDNS/UDP discovery updates
   useEffect(() => {
     invokeCommand('scan_peers').then((data) => {
       if (Array.isArray(data)) setPeers(data);
     });
+
+    let unlisten = null;
+    listenToPeerUpdates((updatedPeers) => {
+      if (Array.isArray(updatedPeers)) {
+        setPeers(updatedPeers);
+      }
+    }).then((fn) => {
+      unlisten = fn;
+    });
+
+    return () => {
+      if (typeof unlisten === 'function') unlisten();
+    };
   }, []);
+
+  const handlePeerPaired = (newPeer) => {
+    if (!newPeer || !newPeer.id) return;
+    setPeers((prev) => {
+      const exists = prev.some((p) => p.id === newPeer.id);
+      return exists ? prev.map((p) => (p.id === newPeer.id ? newPeer : p)) : [...prev, newPeer];
+    });
+    setSelectedPeers([newPeer.id]);
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
@@ -224,6 +246,7 @@ export default function App() {
           isOpen={isScanQrOpen}
           onClose={() => setIsScanQrOpen(false)}
           deviceName={deviceName}
+          onPeerPaired={handlePeerPaired}
         />
       </div>
     );
@@ -345,6 +368,7 @@ export default function App() {
         isOpen={isScanQrOpen}
         onClose={() => setIsScanQrOpen(false)}
         deviceName={deviceName}
+        onPeerPaired={handlePeerPaired}
       />
 
     </div>
