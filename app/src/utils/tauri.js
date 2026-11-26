@@ -72,7 +72,15 @@ export async function invokeCommand(command, args = {}) {
         signal: '100%',
         status: 'ready',
       };
-    case 'ping_peer':
+    case 'start_file_transfer':
+      return 'simulated-tx-' + Date.now();
+    case 'start_text_transfer':
+      return 'simulated-txt-' + Date.now();
+    case 'respond_transfer':
+      return true;
+    case 'cancel_transfer':
+      return true;
+    case 'update_transfer_settings':
       return true;
     default:
       return null;
@@ -117,4 +125,67 @@ export async function pairWithCode(code) {
 export async function pingPeer(targetIp, targetPort = 53318) {
   return await invokeCommand('ping_peer', { targetIp, targetPort });
 }
+
+export async function startFileTransfer(peerIds, filePaths) {
+  return await invokeCommand('start_file_transfer', { peerIds, filePaths });
+}
+
+export async function startTextTransfer(peerIds, text) {
+  return await invokeCommand('start_text_transfer', { peerIds, text });
+}
+
+export async function respondTransfer(transferId, accept) {
+  return await invokeCommand('respond_transfer', { transferId, accept });
+}
+
+export async function cancelTransfer(transferId) {
+  return await invokeCommand('cancel_transfer', { transferId });
+}
+
+export async function updateTransferSettings({ autoAccept, downloadFolder, deviceName }) {
+  return await invokeCommand('update_transfer_settings', {
+    autoAccept,
+    downloadFolder,
+    deviceName,
+  });
+}
+
+/**
+ * Listen to incoming transfers (files or text snippets)
+ */
+export async function listenToIncomingTransfer(callback) {
+  if (isTauri()) {
+    try {
+      const { listen } = await import('@tauri-apps/api/event');
+      return await listen('incoming-transfer', (event) => {
+        if (callback && event && event.payload) {
+          callback(event.payload);
+        }
+      });
+    } catch (e) {
+      console.warn('Tauri event incoming-transfer listen failed:', e);
+    }
+  }
+  return () => {};
+}
+
+/**
+ * Listen to real-time transfer progress, speed, ETA, and verification
+ */
+export async function listenToTransferProgress(callback) {
+  if (isTauri()) {
+    try {
+      const { listen } = await import('@tauri-apps/api/event');
+      return await listen('transfer-progress', (event) => {
+        if (callback && event && event.payload) {
+          callback(event.payload);
+        }
+      });
+    } catch (e) {
+      console.warn('Tauri event transfer-progress listen failed:', e);
+    }
+  }
+  return () => {};
+}
+
 
