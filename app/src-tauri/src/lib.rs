@@ -210,11 +210,10 @@ pub fn run() {
         .setup(move |app| {
             let handle = app.handle().clone();
 
-            // Explicitly ensure the main window is visible, unminimized, and focused on launch
+            // Explicitly ensure the main window is visible and focused on launch
             match app.get_webview_window("main") {
                 Some(window) => {
                     let _ = window.show();
-                    let _ = window.unminimize();
                     let _ = window.set_focus();
                 }
                 None => {
