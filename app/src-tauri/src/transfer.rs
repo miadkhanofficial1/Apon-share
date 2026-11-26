@@ -6,7 +6,7 @@ use std::net::SocketAddr;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
-use tauri::{AppHandle, Emitter};
+use tauri::{async_runtime, AppHandle, Emitter};
 use tokio::fs::{self, File};
 use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt, SeekFrom};
 use tokio::net::{TcpListener, TcpStream};
@@ -138,7 +138,7 @@ impl TransferEngine {
 
     pub fn set_app_handle(&self, handle: AppHandle) {
         let engine = self.clone();
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             let mut h = engine.app_handle.write().await;
             *h = Some(handle);
         });
@@ -146,7 +146,7 @@ impl TransferEngine {
 
     pub fn start(&self) {
         let engine = self.clone();
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             let addr = SocketAddr::from(([0, 0, 0, 0], TRANSFER_PORT));
             let listener = match TcpListener::bind(addr).await {
                 Ok(l) => {
@@ -163,7 +163,7 @@ impl TransferEngine {
 
             while let Ok((stream, peer_addr)) = listener.accept().await {
                 let eng = engine.clone();
-                tokio::spawn(async move {
+                async_runtime::spawn(async move {
                     if let Err(e) = eng.handle_incoming_connection(stream, peer_addr).await {
                         eprintln!("[Apon Transfer] Connection from {} error: {}", peer_addr, e);
                     }
@@ -448,7 +448,7 @@ impl TransferEngine {
             let p_ip = peer.ip.clone();
             let p_port = TRANSFER_PORT;
 
-            tokio::spawn(async move {
+            async_runtime::spawn(async move {
                 if let Err(e) = engine.stream_to_peer(&p_id, &p_ip, p_port, m, p_paths).await {
                     eprintln!("[Apon Transfer] Stream to {} ({}) failed: {}", p_id, p_ip, e);
                 }
@@ -606,7 +606,7 @@ impl TransferEngine {
             let p_ip = peer.ip.clone();
             let p_port = TRANSFER_PORT;
 
-            tokio::spawn(async move {
+            async_runtime::spawn(async move {
                 let addr: SocketAddr = match format!("{}:{}", p_ip, p_port).parse() {
                     Ok(a) => a,
                     Err(_) => return,

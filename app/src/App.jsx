@@ -401,12 +401,12 @@ export default function App() {
       <header className="h-14 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 safe-top shrink-0 bg-white/90 dark:bg-[#090D16]/90 backdrop-blur-md z-30">
         <div className="flex items-center gap-2">
           <img
-            src="/assets/logo.png"
+            src="./assets/logo.png"
             alt="Apon Logo"
             className="h-6 w-auto object-contain block dark:hidden"
           />
           <img
-            src="/assets/logo-dark.png"
+            src="./assets/logo-dark.png"
             alt="Apon Logo"
             className="h-6 w-auto object-contain hidden dark:block"
           />

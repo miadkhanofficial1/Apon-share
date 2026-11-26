@@ -1,7 +1,7 @@
 // Platform detection helper for adaptive UI
 
 export function isTauri() {
-  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+  return typeof window !== 'undefined' && ('__TAURI_INTERNALS__' in window || '__TAURI__' in window);
 }
 
 export function detectPlatform() {

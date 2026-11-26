@@ -2,7 +2,7 @@ use crate::discovery::{DiscoveryEngine, PeerDevice, PROTOCOL_VERSION, SERVICE_PO
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 use std::sync::Arc;
-use tauri::AppHandle;
+use tauri::{async_runtime, AppHandle};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::RwLock;
@@ -59,7 +59,7 @@ impl FallbackServer {
     pub fn start(&self, app_handle: Option<AppHandle>) {
         let server = self.clone();
         let handle = app_handle.or_else(|| self.app_handle.clone());
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             let bind_addr = SocketAddr::from(([0, 0, 0, 0], SERVICE_PORT));
             let listener = match TcpListener::bind(bind_addr).await {
                 Ok(l) => l,
@@ -72,7 +72,7 @@ impl FallbackServer {
 
             while let Ok((stream, peer_addr)) = listener.accept().await {
                 let s = server.clone();
-                tokio::spawn(async move {
+                async_runtime::spawn(async move {
                     s.handle_client(stream, peer_addr).await;
                 });
             }

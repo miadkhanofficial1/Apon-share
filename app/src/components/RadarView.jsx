@@ -84,7 +84,7 @@ export default function RadarView({
         <div className="relative z-10 flex flex-col items-center">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-apon-navy p-0.5 shadow-lg shadow-sky-500/20 flex items-center justify-center">
             <div className="w-full h-full bg-white dark:bg-slate-950 rounded-[14px] flex items-center justify-center p-2">
-              <img src="/assets/icon.png" alt="This Device" className="w-7 h-7 rounded-md" />
+              <img src="./assets/icon.png" alt="This Device" className="w-7 h-7 rounded-md" />
             </div>
           </div>
           <div className="mt-1 flex items-center gap-1">

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
-use tauri::{AppHandle, Emitter};
+use tauri::{async_runtime, AppHandle, Emitter};
 use tokio::net::UdpSocket;
 use tokio::sync::RwLock;
 
@@ -106,7 +106,7 @@ impl DiscoveryEngine {
         // 1. UDP Beacon Broadcaster
         let engine_broadcast = engine.clone();
         let app_broadcast = app.clone();
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             let bind_addr = SocketAddr::from(([0, 0, 0, 0], 0));
             let socket = match UdpSocket::bind(bind_addr).await {
                 Ok(s) => {
@@ -154,7 +154,7 @@ impl DiscoveryEngine {
         // 2. UDP Beacon Listener
         let engine_recv = engine.clone();
         let app_recv = app.clone();
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             let bind_addr = SocketAddr::from(([0, 0, 0, 0], BROADCAST_PORT));
             let socket = match UdpSocket::bind(bind_addr).await {
                 Ok(s) => {
@@ -212,7 +212,7 @@ impl DiscoveryEngine {
         // 3. 3-Second Offline Peer Pruning Loop
         let engine_prune = engine.clone();
         let app_prune = app.clone();
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             loop {
                 tokio::time::sleep(Duration::from_millis(1000)).await;
 
@@ -230,7 +230,7 @@ impl DiscoveryEngine {
         });
 
         // 4. mDNS Advertiser & Discovery
-        tokio::spawn(async move {
+        async_runtime::spawn(async move {
             // Background mDNS responder setup
             if let Ok(mdns) = mdns_sd::ServiceDaemon::new() {
                 let service_type = "_apon-share._udp.local.";

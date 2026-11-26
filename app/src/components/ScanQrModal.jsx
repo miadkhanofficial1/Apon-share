@@ -170,7 +170,7 @@ export default function ScanQrModal({ isOpen, onClose, deviceName, onPeerPaired 
                 {/* Logo Center badge */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="w-8 h-8 rounded-lg bg-white p-0.5 shadow-md flex items-center justify-center">
-                    <img src="/assets/icon.png" alt="Apon" className="w-6 h-6 rounded" />
+                    <img src="./assets/icon.png" alt="Apon" className="w-6 h-6 rounded" />
                   </div>
                 </div>
               </div>

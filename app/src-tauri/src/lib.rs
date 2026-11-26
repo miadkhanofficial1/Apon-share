@@ -221,11 +221,26 @@ pub fn run() {
                 }
             }
 
-            // Start UDP/mDNS discovery, Fallback Server, and P2P Streaming Engine
-            discovery_for_setup.start(handle.clone());
-            server_for_setup.start(Some(handle.clone()));
-            transfer_for_setup.set_app_handle(handle);
-            transfer_for_setup.start();
+            // Spawn background discovery, fallback server, and P2P streaming engines safely
+            let disc = discovery_for_setup.clone();
+            let h_disc = handle.clone();
+            tauri::async_runtime::spawn(async move {
+                disc.start(h_disc);
+            });
+
+            let srv = server_for_setup.clone();
+            let h_srv = handle.clone();
+            tauri::async_runtime::spawn(async move {
+                srv.start(Some(h_srv));
+            });
+
+            let trf = transfer_for_setup.clone();
+            let h_trf = handle.clone();
+            tauri::async_runtime::spawn(async move {
+                trf.set_app_handle(h_trf);
+                trf.start();
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -241,7 +256,15 @@ pub fn run() {
             update_transfer_settings
         ]);
 
-    if let Err(e) = builder.run(tauri::generate_context!()) {
-        log_startup_error(None, &format!("Fatal error while running Apon application: {}", e));
-    }
+    let app = match builder.build(tauri::generate_context!()) {
+        Ok(app) => app,
+        Err(e) => {
+            log_startup_error(None, &format!("Fatal error while building Apon application: {}", e));
+            return;
+        }
+    };
+
+    app.run(|_app_handle, _event| {
+        // Keeps the Tauri event loop running until the user explicitly exits
+    });
 }
