@@ -144,6 +144,33 @@ async fn update_transfer_settings(
     Ok(())
 }
 
+pub fn log_startup_error(app_handle: Option<&AppHandle>, msg: &str) {
+    eprintln!("[Apon Startup] {}", msg);
+    let log_path = if let Some(handle) = app_handle {
+        if let Ok(dir) = handle.path().app_data_dir() {
+            let _ = std::fs::create_dir_all(&dir);
+            dir.join("startup.log")
+        } else {
+            PathBuf::from("startup.log")
+        }
+    } else {
+        PathBuf::from("startup.log")
+    };
+
+    if let Ok(mut file) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(log_path)
+    {
+        use std::io::Write;
+        let ts = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        let _ = writeln!(file, "[Timestamp: {}s] {}", ts, msg);
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let initial_name = format!(
@@ -171,7 +198,7 @@ pub fn run() {
     let server_for_setup = server_engine.clone();
     let transfer_for_setup = transfer_engine.clone();
 
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
@@ -181,10 +208,23 @@ pub fn run() {
             transfer: transfer_engine,
         })
         .setup(move |app| {
-            // Start UDP/mDNS discovery, Fallback Server, and P2P Streaming Engine
             let handle = app.handle().clone();
+
+            // Explicitly ensure the main window is visible, unminimized, and focused on launch
+            match app.get_webview_window("main") {
+                Some(window) => {
+                    let _ = window.show();
+                    let _ = window.unminimize();
+                    let _ = window.set_focus();
+                }
+                None => {
+                    log_startup_error(Some(&handle), "Main window 'main' not found during setup");
+                }
+            }
+
+            // Start UDP/mDNS discovery, Fallback Server, and P2P Streaming Engine
             discovery_for_setup.start(handle.clone());
-            server_for_setup.start();
+            server_for_setup.start(Some(handle.clone()));
             transfer_for_setup.set_app_handle(handle);
             transfer_for_setup.start();
             Ok(())
@@ -200,7 +240,9 @@ pub fn run() {
             respond_transfer,
             cancel_transfer,
             update_transfer_settings
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running Apon application");
+        ]);
+
+    if let Err(e) = builder.run(tauri::generate_context!()) {
+        log_startup_error(None, &format!("Fatal error while running Apon application: {}", e));
+    }
 }

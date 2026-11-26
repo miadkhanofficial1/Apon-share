@@ -18,6 +18,8 @@ target/
 .env.production.local
 *.key
 *.key.pub
+*.keystore
+*.apk
 
 # Logs
 npm-debug.log*

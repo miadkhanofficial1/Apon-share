@@ -147,14 +147,16 @@ impl TransferEngine {
     pub fn start(&self) {
         let engine = self.clone();
         tokio::spawn(async move {
-            let addr: SocketAddr = format!("0.0.0.0:{}", TRANSFER_PORT).parse().unwrap();
+            let addr = SocketAddr::from(([0, 0, 0, 0], TRANSFER_PORT));
             let listener = match TcpListener::bind(addr).await {
                 Ok(l) => {
                     println!("[Apon Transfer] P2P Stream listener bound on port {}", TRANSFER_PORT);
                     l
                 }
                 Err(e) => {
-                    eprintln!("[Apon Transfer] Failed to bind transfer listener on {}: {}", TRANSFER_PORT, e);
+                    let err_msg = format!("Failed to bind transfer listener on {}: {}", TRANSFER_PORT, e);
+                    let h = engine.app_handle.read().await;
+                    crate::log_startup_error(h.as_ref(), &err_msg);
                     return;
                 }
             };

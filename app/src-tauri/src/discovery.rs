@@ -105,20 +105,22 @@ impl DiscoveryEngine {
 
         // 1. UDP Beacon Broadcaster
         let engine_broadcast = engine.clone();
+        let app_broadcast = app.clone();
         tokio::spawn(async move {
-            let bind_addr: SocketAddr = "0.0.0.0:0".parse().unwrap();
+            let bind_addr = SocketAddr::from(([0, 0, 0, 0], 0));
             let socket = match UdpSocket::bind(bind_addr).await {
                 Ok(s) => {
                     let _ = s.set_broadcast(true);
                     s
                 }
                 Err(e) => {
-                    eprintln!("[Apon] Failed to bind UDP broadcast sender: {}", e);
+                    let err_msg = format!("Failed to bind UDP broadcast sender: {}", e);
+                    crate::log_startup_error(Some(&app_broadcast), &err_msg);
                     return;
                 }
             };
 
-            let broadcast_target: SocketAddr = format!("255.255.255.255:{}", BROADCAST_PORT).parse().unwrap();
+            let broadcast_target = SocketAddr::from(([255, 255, 255, 255], BROADCAST_PORT));
 
             loop {
                 // Refresh local IP if changed
@@ -153,14 +155,15 @@ impl DiscoveryEngine {
         let engine_recv = engine.clone();
         let app_recv = app.clone();
         tokio::spawn(async move {
-            let bind_addr: SocketAddr = format!("0.0.0.0:{}", BROADCAST_PORT).parse().unwrap();
+            let bind_addr = SocketAddr::from(([0, 0, 0, 0], BROADCAST_PORT));
             let socket = match UdpSocket::bind(bind_addr).await {
                 Ok(s) => {
                     let _ = s.set_broadcast(true);
                     s
                 }
                 Err(e) => {
-                    eprintln!("[Apon] Failed to bind UDP listener on {}: {}", BROADCAST_PORT, e);
+                    let err_msg = format!("Failed to bind UDP listener on {}: {}", BROADCAST_PORT, e);
+                    crate::log_startup_error(Some(&app_recv), &err_msg);
                     return;
                 }
             };

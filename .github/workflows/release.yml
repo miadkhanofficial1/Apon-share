@@ -95,6 +95,7 @@ jobs:
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
           echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
 
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;26.3.11579264"
@@ -125,11 +126,25 @@ jobs:
           fi
           npm run tauri android build -- --apk
 
+      - name: Sign Release Android APK
+        run: |
+          keytool -genkeypair -v -keystore release.keystore -alias apon -keyalg RSA -keysize 2048 -validity 10000 -storepass aponrelease2026 -keypass aponrelease2026 -dname "CN=Apon, OU=MK.Studio, O=MK.Studio, L=Dhaka, S=Dhaka, C=BD"
+          UNSIGNED_APK=$(find app/src-tauri/gen/android/app/build/outputs/apk -name "*unsigned.apk" -o -name "*.apk" | head -n 1)
+          echo "Found APK to sign: $UNSIGNED_APK"
+          if [ -z "$UNSIGNED_APK" ]; then
+            echo "Error: No APK found to sign!"
+            exit 1
+          fi
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v -p 4 "$UNSIGNED_APK" aligned.apk
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks release.keystore --ks-pass pass:aponrelease2026 --out Apon-1.0.0-universal.apk aligned.apk
+          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose Apon-1.0.0-universal.apk
+
       - name: Upload Android APK to Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
+            Apon-1.0.0-universal.apk
             app/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

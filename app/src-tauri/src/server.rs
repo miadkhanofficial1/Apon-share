@@ -56,14 +56,16 @@ impl FallbackServer {
         }
     }
 
-    pub fn start(&self) {
+    pub fn start(&self, app_handle: Option<AppHandle>) {
         let server = self.clone();
+        let handle = app_handle.or_else(|| self.app_handle.clone());
         tokio::spawn(async move {
-            let bind_addr: SocketAddr = format!("0.0.0.0:{}", SERVICE_PORT).parse().unwrap();
+            let bind_addr = SocketAddr::from(([0, 0, 0, 0], SERVICE_PORT));
             let listener = match TcpListener::bind(bind_addr).await {
                 Ok(l) => l,
                 Err(e) => {
-                    eprintln!("[Apon] Failed to bind fallback TCP server on port {}: {}", SERVICE_PORT, e);
+                    let err_msg = format!("Failed to bind fallback TCP server on port {}: {}", SERVICE_PORT, e);
+                    crate::log_startup_error(handle.as_ref(), &err_msg);
                     return;
                 }
             };
