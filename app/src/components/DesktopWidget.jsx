@@ -17,7 +17,8 @@ export default function DesktopWidget({
   trayActive,
   onToggleTray,
   onDropFiles,
-  onClipboardPaste
+  onClipboardPaste,
+  updateBanner
 }) {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
@@ -158,6 +159,8 @@ export default function DesktopWidget({
           </button>
         </div>
       </header>
+
+      {updateBanner && <div className="pt-2">{updateBanner}</div>}
 
       {/* Main Area: Radar Visualizer */}
       <main className="flex-1 relative flex flex-col justify-center min-h-0">

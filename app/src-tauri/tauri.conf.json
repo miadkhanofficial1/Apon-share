@@ -48,5 +48,14 @@
     "macOS": {
       "entitlements": "Entitlements.plist"
     }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU5RTNEMUUxRDZFM0RFRjgKUldUNDN1UFc0ZEhqV1FCMllTVzJGVUo3czF3YjAzVVJ4OExZYWZlYmJSVTV1TEY0cTIwMEpnQlQK",
+      "endpoints": [
+        "https://github.com/miadkhanofficial1/Apon-share/releases/latest/download/latest.json"
+      ]
+    }
   }
 }
+

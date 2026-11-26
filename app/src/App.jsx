@@ -10,7 +10,8 @@ import {
   cancelTransfer,
   updateTransferSettings,
   listenToIncomingTransfer,
-  listenToTransferProgress
+  listenToTransferProgress,
+  checkForAppUpdate
 } from './utils/tauri';
 import DesktopWidget from './components/DesktopWidget';
 import RadarView from './components/RadarView';
@@ -20,6 +21,7 @@ import SettingsModal from './components/SettingsModal';
 import SendTextModal from './components/SendTextModal';
 import ScanQrModal from './components/ScanQrModal';
 import TransferProgress from './components/TransferProgress';
+import UpdateBanner from './components/UpdateBanner';
 import { Sun, Moon, Sliders, Radio, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -56,6 +58,9 @@ export default function App() {
   const [isSendTextOpen, setIsSendTextOpen] = useState(false);
   const [isScanQrOpen, setIsScanQrOpen] = useState(false);
 
+  // In-App OTA Update State
+  const [updateInfo, setUpdateInfo] = useState(null);
+
   // Theme synchronization
   useEffect(() => {
     applyTheme(theme);
@@ -66,6 +71,15 @@ export default function App() {
     const handleResize = () => setPlatform(detectPlatform());
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Check for OTA updates on load
+  useEffect(() => {
+    checkForAppUpdate().then((res) => {
+      if (res?.available) {
+        setUpdateInfo(res);
+      }
+    });
   }, []);
 
   // Fetch peers on load and subscribe to real-time mDNS/UDP discovery & transfer engine
@@ -320,6 +334,14 @@ export default function App() {
           onToggleTray={() => setTrayActive(!trayActive)}
           onDropFiles={handleDropFiles}
           onClipboardPaste={handleClipboardPaste}
+          updateBanner={
+            updateInfo ? (
+              <UpdateBanner
+                updateInfo={updateInfo}
+                onDismiss={() => setUpdateInfo(null)}
+              />
+            ) : null
+          }
         />
 
         {/* Floating Transfer Progress */}
@@ -422,6 +444,16 @@ export default function App() {
           </button>
         </div>
       </header>
+
+      {/* In-App OTA Update Notification */}
+      {updateInfo && (
+        <div className="pt-2">
+          <UpdateBanner
+            updateInfo={updateInfo}
+            onDismiss={() => setUpdateInfo(null)}
+          />
+        </div>
+      )}
 
       {/* Top 60%: Interactive Radar View */}
       <main className="flex-1 relative flex flex-col justify-center min-h-0">

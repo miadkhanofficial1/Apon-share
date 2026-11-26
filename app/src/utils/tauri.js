@@ -188,4 +188,81 @@ export async function listenToTransferProgress(callback) {
   return () => {};
 }
 
+/**
+ * In-App OTA Update Check using tauri-plugin-updater
+ */
+export async function checkForAppUpdate() {
+  if (isTauri()) {
+    try {
+      const { check } = await import('@tauri-apps/plugin-updater');
+      const update = await check();
+      if (update) {
+        return {
+          available: true,
+          version: update.version,
+          currentVersion: update.currentVersion,
+          body: update.body || '',
+          date: update.date,
+          _rawUpdate: update,
+        };
+      }
+      return { available: false };
+    } catch (e) {
+      console.warn('OTA Update check warning:', e);
+      return { available: false, error: e?.message };
+    }
+  }
+
+  // Graceful browser mode
+  return { available: false };
+}
+
+/**
+ * Download and install the update in the background, then restart
+ */
+export async function installAppUpdate(updateObj, onProgress) {
+  if (isTauri() && updateObj?._rawUpdate) {
+    try {
+      let downloaded = 0;
+      let contentLength = 0;
+      await updateObj._rawUpdate.downloadAndInstall((event) => {
+        switch (event.event) {
+          case 'Started':
+            contentLength = event.data?.contentLength || 0;
+            break;
+          case 'Progress':
+            downloaded += event.data?.chunkLength || 0;
+            if (onProgress && contentLength > 0) {
+              onProgress(Math.min(99, Math.round((downloaded / contentLength) * 100)));
+            }
+            break;
+          case 'Finished':
+            if (onProgress) onProgress(100);
+            break;
+          default:
+            break;
+        }
+      });
+
+      // Restart application
+      const { relaunch } = await import('@tauri-apps/plugin-process');
+      await relaunch();
+      return true;
+    } catch (e) {
+      console.error('Failed to download & install OTA update:', e);
+      throw e;
+    }
+  }
+
+  // Simulated browser fallback
+  if (onProgress) {
+    for (let i = 10; i <= 100; i += 25) {
+      await new Promise((r) => setTimeout(r, 200));
+      onProgress(i);
+    }
+  }
+  return true;
+}
+
+
 
