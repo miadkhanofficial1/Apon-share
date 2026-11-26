@@ -5,10 +5,10 @@ export default function Footer() {
   return (
     <footer className="w-full bg-white dark:bg-[#090D16] border-t border-slate-200/80 dark:border-slate-800/80 py-8 transition-colors">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:text-left gap-6 md:gap-4">
           
-          {/* Logo & Tagline */}
-          <div className="flex items-center gap-2.5">
+          {/* Logo */}
+          <div className="flex items-center justify-center md:justify-start">
             <img
               src="/assets/logo.png"
               alt="Apon Logo"
@@ -19,13 +19,10 @@ export default function Footer() {
               alt="Apon Logo"
               className="h-6 w-auto object-contain hidden dark:block"
             />
-            <span className="text-xs text-slate-500 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 pl-2.5">
-              Instant. Private. Yours.
-            </span>
           </div>
 
           {/* Quick Links */}
-          <div className="flex items-center gap-6 text-xs font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-slate-500 dark:text-slate-400">
             <a href="#features" className="hover:text-apon-cyan dark:hover:text-sky-400 transition-colors">
               Features
             </a>
@@ -47,7 +44,7 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="text-center sm:text-right">
+          <div className="text-center md:text-right">
             <p className="text-xs text-slate-500 dark:text-slate-400">
               © 2026 Apon by MK.Studio. Instant. Private. Yours.
             </p>
